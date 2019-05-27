@@ -1,0 +1,97 @@
+import java.awt.EventQueue;
+import java.awt.Window;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class PhysicianLogin {
+
+	private JFrame frame;
+	private JTextField txtUsername;
+	private JTextField txtPassword;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					PhysicianLogin window = new PhysicianLogin();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public PhysicianLogin() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblUsername = new JLabel("USERNAME");
+		lblUsername.setBounds(46, 81, 87, 14);
+		frame.getContentPane().add(lblUsername);
+		
+		JLabel lblPassword = new JLabel("PASSWORD");
+		lblPassword.setBounds(46, 143, 87, 14);
+		frame.getContentPane().add(lblPassword);
+		
+		txtUsername = new JTextField();
+		txtUsername.setText("username");
+		txtUsername.setBounds(225, 78, 170, 20);
+		frame.getContentPane().add(txtUsername);
+		txtUsername.setColumns(10);
+		
+		txtPassword = new JTextField();
+		txtPassword.setText("password");
+		txtPassword.setBounds(225, 140, 170, 20);
+		frame.getContentPane().add(txtPassword);
+		txtPassword.setColumns(10);
+		
+		JButton btnLogin = new JButton("LOGIN");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String un = txtUsername.getText();
+				String pw = txtPassword.getText();
+				
+				if(un.equals("name") && pw.equals("password"))
+				{
+					JOptionPane.showMessageDialog(frame, "Login");
+					frame.dispose();
+					Physi ph = new Physi();
+					ph.open();
+					
+				}
+					else
+					{
+						JOptionPane.showMessageDialog(frame, "Invalid");
+					}
+					
+				}
+			
+			
+		});
+		btnLogin.setBounds(150, 203, 89, 23);
+		frame.getContentPane().add(btnLogin);
+	}
+}
