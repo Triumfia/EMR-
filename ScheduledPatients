@@ -1,0 +1,322 @@
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.border.EmptyBorder;
+
+//package UI;
+
+import java.awt.BorderLayout;
+
+import java.awt.EventQueue;
+
+import java.sql.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelListener;
+
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Desktop;
+import java.net.URI;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.util.Vector;
+import java.awt.GridLayout;
+
+import javax.swing.GroupLayout.Alignment;
+
+import java.awt.Font;
+
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.eclipse.wb.swt.LoadPatients;
+
+import net.proteanit.sql.DbUtils;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.SystemColor;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import base.DBBase;
+import base.DBConnect;
+
+public class ScheduledPatients extends JFrame {
+	
+	JFrame frmScheduledPatients;
+	private JPanel contentPane;
+	private JTextField firstname;
+	private JTable table;
+
+	private DBConnect con;
+	private DBBase data;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ScheduledPatients frame = new ScheduledPatients();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public ScheduledPatients() {
+		setBackground(SystemColor.textHighlight);
+		setResizable(false);
+		setTitle("Scheduled Patients");
+		setBounds(100, 100, 1018, 769);
+		contentPane = new JPanel();
+		contentPane.setForeground(SystemColor.desktop);
+		contentPane.setBackground(SystemColor.inactiveCaption);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+		con = new DBConnect();
+		data = new DBBase();
+		con.initialise("root", "password");
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		
+		JLabel lblLastName = new JLabel("Patient ID:");
+		lblLastName.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		final JLabel lblPID = new JLabel("");
+		lblPID.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(SystemColor.inactiveCaptionBorder);
+		
+		JLabel lblSearchPatient = new JLabel("Search Patient:");
+		lblSearchPatient.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		
+		JLabel lblSelectPatient = new JLabel("Click on a Patient");
+		lblSelectPatient.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		
+		JButton btnSelect = new JButton("Confirm your Pick");
+		btnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			int selectedRowIndex = table.getSelectedRow();
+			
+			lblPID.setText(model.getValueAt(selectedRowIndex, 0).toString());
+			}
+		});
+		btnSelect.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		firstname = new JTextField();
+		firstname.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		firstname.setColumns(10);
+		
+		//JButton btnExit = new JButton("Exit");
+		
+		//btnExit.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		JButton btnSearch = new JButton("Load Patients");
+		btnSearch.addActionListener(new ActionListener() {
+	
+		 public void actionPerformed(ActionEvent arg0) {
+			//ResultSet rs = data.query(con.getConnection(), "patient", Collections.emptyMap());
+				try {
+					Class.forName("com.mysql.jdbc.Driver");
+					Connection con = DriverManager.getConnection("jdbc:mysql://35.226.84.132:3306/EMR?user=root&password=password\";\r\n" + 
+							"    			connection", "root", "password");
+					Statement stmt = con.createStatement();
+					String sql = "Select patient_id, first_name, last_name, DOB from PATIENT";
+					ResultSet rs = stmt.executeQuery(sql);
+					table.setModel (DbUtils.resultSetToTableModel(rs));
+					//table = new JTable(data.fitToTable(rs));
+					//JScrollPane scrollPane = new JScrollPane(table);
+					//scrollPane.setBounds(52, 135, 678, 270);
+					//panel.add(scrollPane);
+					
+				} 
+				catch(Exception e) {System.out.print(e);}
+			}
+		});
+		btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		
+		
+		JButton btnSearch_1 = new JButton("Search");
+		btnSearch_1.addActionListener(new ActionListener() {
+			//@Override
+			//public void actionPerformed(ActionEvent arg0) {
+				//String searchText = firstname.getText();
+
+				//if( !searchText.equals("") )
+				//{
+					//Map<String, Object> map = new HashMap<String, Object>();
+					//map.put("username", searchText);
+
+					//ResultSet rs = data.query(con.getConnection(), "user", map);
+					//try
+					//{
+						//table = new JTable(data.fitToTable(rs));
+						//JScrollPane scrollPane = new JScrollPane(table);
+						//scrollPane.setBounds(52, 135, 678, 270);
+						//panel.add(scrollPane);
+					//} catch (SQLException e1) {
+						//e1.printStackTrace();
+					//}
+				//}
+			//}
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					Connection con = DriverManager.getConnection("jdbc:mysql://35.226.84.132:3306/EMR?user=root&password=password\";\r\n" + 
+							"    			connection", "root", "password");
+					String sql = "Select patient_id, first_name, last_name, DOB from PATIENT WHERE first_name ='" +firstname.getText()+ "'";
+					Statement stmt = con.createStatement();
+					ResultSet rs = stmt.executeQuery(sql);
+					table.setModel (DbUtils.resultSetToTableModel(rs));
+					
+				} 
+				catch(Exception e) {System.out.print(e);}
+			}
+		});
+		btnSearch_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		JButton btnClear = new JButton("Clear Patients");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				firstname.setText(null);
+			}
+		});
+		btnClear.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(69)
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_panel.createSequentialGroup()
+									.addComponent(lblSearchPatient, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
+									.addGap(18))
+								.addGroup(gl_panel.createSequentialGroup()
+									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+										.addComponent(btnSelect, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+										.addComponent(btnClear, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+										.addComponent(btnSearch, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE))
+									.addGap(61)))
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel.createSequentialGroup()
+									.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+									.addGap(327))
+								.addGroup(gl_panel.createSequentialGroup()
+									.addComponent(firstname, GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+									.addGap(18)
+									.addComponent(btnSearch_1, GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+									.addGap(234))))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(750)
+						//	.addComponent(btnExit, GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+							.addGap(69))))
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(420)
+					.addComponent(lblSelectPatient, GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+					.addGap(373))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(84)
+							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnSearch_1, GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+									.addComponent(firstname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(lblSearchPatient)))
+							.addGap(82)
+							.addComponent(lblSelectPatient)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(253)
+							.addComponent(btnSearch, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+							.addGap(26)
+							.addComponent(btnSelect)
+							.addGap(18)
+							.addComponent(btnClear, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+							.addGap(134)))
+					.addGap(46)
+					//.addComponent(btnExit, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+					.addGap(51))
+		);
+		
+		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int index = table.getSelectedRow();
+				TableModel model = table.getModel();
+				String first_name = model.getValueAt(index, 1).toString();
+				int selectedRowIndex = table.getSelectedRow();
+			
+				LoadPatients nw = new LoadPatients();
+				nw.NewScreen();
+			}
+		});
+		table.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		scrollPane.setViewportView(table);
+		panel.setLayout(gl_panel);
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 997, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(tabbedPane))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(788)
+							.addComponent(lblLastName)
+							.addGap(22)
+							.addComponent(lblPID)))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblLastName)
+						.addComponent(lblPID))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 696, Short.MAX_VALUE)
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(3))
+		);
+		contentPane.setLayout(gl_contentPane);
+	}
+}
+
